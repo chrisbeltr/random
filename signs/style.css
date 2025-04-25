@@ -1,0 +1,199 @@
+/*? */
+/*? document structure
+/**   1. sign definitions
+/**   2. sizes
+/**   3. colors
+/**   4. direction
+/**   5. special
+/**   i. page setup
+/*? */
+
+/*? */
+/** about signs
+/*? must be proportaional to font size:
+/**   - border width
+/**   - border radius (for square signs)
+/**   - padding
+/*? 
+/*? how to achieve this:
+/**   have elements be dependent on `em`s.
+/**   facilitated by text size classes.
+/*? */
+
+/** sign types **/
+.sign-square,
+.sign-circle {
+  /** defaults for all signs **/
+  width: max-content;
+  height: auto;
+  border-style: solid;
+}
+
+.sign-square {
+  /*? default styling ?*/
+  color: white;
+  border-color: white;
+  background-color: var(--green);
+
+  /*! size dependent !*/
+  border-width: var(--border-width);
+  border-radius: 0.4em;
+  padding: 1em;
+}
+
+.sign-circle {
+  aspect-ratio: 1;
+
+  /*? default styling ?*/
+  color: black;
+  border-color: var(--red);
+  background-color: white;
+
+  /*! size dependent !*/
+  border-width: var(--border-width);
+  border-radius: 50%;
+  padding: 0.25em;
+}
+
+/** colors **/
+.bg-blue {
+  background-color: var(--blue);
+}
+
+.bg-green {
+  background-color: var(--green);
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-black {
+  color: black;
+}
+
+.text-yellow {
+  color: var(--pale-yellow);
+}
+
+.border-red {
+  border-color: var(--red);
+}
+
+/** sizes **/
+.text-large {
+  font-size: 3rem;
+}
+
+.text-medium {
+  font-size: 2rem;
+}
+
+.text-small {
+  font-size: 1rem;
+}
+
+/** direction **/
+.dir-ltr {
+  flex-direction: row;
+}
+
+.dir-ttb {
+  flex-direction: column;
+}
+
+/** special **/
+.numerical {
+  line-height: 1em;
+}
+
+.sign-multi {
+  width: max-content;
+  align-items: stretch;
+  gap: 0;
+}
+
+.sign-multi-left {
+  margin-right: calc((var(--border-width) * -0.5));
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sign-multi-middle-lr {
+  margin: 0 calc((var(--border-width) * -0.5));
+  border-radius: 0;
+}
+
+.sign-multi-middle-tb {
+  margin: calc((var(--border-width) * -0.5)) 0;
+  border-radius: 0;
+}
+
+.sign-multi-right {
+  margin-left: calc((var(--border-width) * -0.5));
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.sign-multi-top {
+  margin-bottom: calc((var(--border-width) * -0.5));
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.sign-multi-bottom {
+  margin-top: calc((var(--border-width) * -0.5));
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.no-row-gap {
+  row-gap: 0;
+}
+
+.no-column-gap {
+  column-gap: 0;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+/** page setup **/
+:root {
+  --red: #cd0000;
+  --blue: #04459e;
+  --green: #008100;
+  --pale-yellow: #ffc600;
+
+  --border-width: 0.2em;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: max-content;
+
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+  background-color: black;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.5em;
+}

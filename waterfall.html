@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, minimum-scale=1.0, initial-scale=1.0"
+        />
+        <title>flowing</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                padding: 5px;
+                width: 100dvw;
+                /* height: 100dvh; */
+                overflow: hidden;
+
+                background-color: black;
+
+                display: flex;
+                flex-wrap: wrap;
+                align-content: start;
+            }
+
+            span {
+                display: inline-block;
+                position: relative;
+                margin: 0 -5px;
+                width: max-content;
+                min-width: 15px;
+                flex-shrink: 0;
+
+                font-size: 3rem;
+                font-weight: bold;
+                /* font-family: monospace; */
+                text-box: trim-both cap alphabetic;
+
+                cursor: default;
+            }
+
+            span:nth-child(3n) {
+                color: goldenrod;
+            }
+            span:nth-child(3n + 1) {
+                color: gold;
+            }
+            span:nth-child(3n + 2) {
+                color: darkgoldenrod;
+            }
+
+            /*
+      span:first-of-type {
+        margin: 0 -5px 0 0;
+      }
+
+      span:last-of-type {
+        margin: 0 0 0 -5px;
+      }
+      */
+        </style>
+    </head>
+    <body>
+        <template id="word"><span></span></template>
+        <script>
+            // thank you https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript
+            // you made this ever so slightly more bearable
+            function getTextWidth(text, font) {
+                // re-use canvas object for better performance
+                const canvas =
+                    getTextWidth.canvas ||
+                    (getTextWidth.canvas = document.createElement("canvas"));
+                const context = canvas.getContext("2d");
+                context.font = font;
+                const metrics = context.measureText(text);
+                return metrics.width;
+            }
+
+            function getCssStyle(element, prop) {
+                return window
+                    .getComputedStyle(element, null)
+                    .getPropertyValue(prop);
+            }
+
+            function getCanvasFont(el = document.body) {
+                const fontWeight = getCssStyle(el, "font-weight") || "normal";
+                const fontSize = getCssStyle(el, "font-size") || "16px";
+                const fontFamily =
+                    getCssStyle(el, "font-family") || "Times New Roman";
+
+                return `${fontWeight} ${fontSize} ${fontFamily}`;
+            }
+
+            let spans = [];
+            let line =
+                "so much time on what i hope most will see, yet it may not work for some due to the way the web will try to show my work to you. at most four wide it all must be, else the ones too wide will go over the rest and it all goes awry. we do not want even more of a mess here, you need to be able to read this some what. was it all worth it? will i ever even use this? it seems only time will tell.";
+            let words = line.split(" ");
+            let wordElem = document.getElementById("word");
+            let curr = null;
+
+            for (let i = 0; i < words.length; i++) {
+                curr = document.importNode(wordElem.content, true);
+                let span = curr.querySelector("span");
+                span.textContent = words[i];
+                // span.style.top = `${i * 10}px`;
+                span.addEventListener("mouseenter", () => {
+                    span.style.backgroundColor = "saddlebrown";
+                });
+                span.addEventListener("mouseleave", () => {
+                    span.style.backgroundColor = "";
+                });
+                spans.push(span);
+                document.body.appendChild(span);
+            }
+
+            function calculateTops() {
+                let maxWidth = document.body.clientWidth;
+                // console.log(`maxWidth: ${maxWidth}`);
+                let width = 0;
+                let currTop = 0;
+                for (let i = 0; i < spans.length; i++) {
+                    let textWidth = Math.max(
+                        [
+                            getTextWidth(
+                                spans[i].textContent,
+                                getCanvasFont(spans[i]),
+                            ),
+                        ],
+                        15,
+                    );
+                    width += textWidth;
+                    /* console.log(
+                        `at elem "${spans[i].textContent}", textWidth of ${textWidth} => new width is ${width}`,
+                    ); */
+                    if (width >= maxWidth) {
+                        width = textWidth;
+                        currTop = 0;
+                        // console.log(`rolling over! new width is ${width}`);
+                    }
+                    spans[i].style.top = `${currTop}px`;
+                    currTop += 10;
+                    width -= 10;
+                }
+            }
+
+            function shuffleIndexes() {
+                for (let i = 0; i < spans.length; i++) {
+                    spans[i].style.zIndex = Math.floor(Math.random() * 3 + 1);
+                }
+            }
+
+            setInterval(shuffleIndexes, 500);
+
+            calculateTops();
+            window.addEventListener("resize", calculateTops);
+        </script>
+    </body>
+</html>
